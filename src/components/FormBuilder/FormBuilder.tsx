@@ -100,7 +100,7 @@ const FormBuilder = ({formDetail}: IProps) => {
                 break;
 
                 case EFormElementType.gps:
-                    elements.push(<View key={fieldName} pointerEvents={disableTouch(fieldName)}><InputGPSLocator label={label} id={fieldName} onGPSCordinatesSelected={handleGPS} /></View>)
+                    elements.push(<View key={fieldName} pointerEvents={disableTouch(fieldName)}><InputGPSLocator label={label} id={fieldName} onGPSCordinatesSelected={handleGPS} validations={validations} /></View>)
                     break;
             }
         }

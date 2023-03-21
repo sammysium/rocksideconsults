@@ -67,10 +67,21 @@ function valueIsNotEqualTo(value: string | number, badValue: string | number): I
     if (value.setHours(0,0,0,0) > new Date().setHours(0,0,0,0)) {
         return {
             isValid: false,
-            message: 'This must be a future date'
+            message: 'This must be a past date'
         }
     }
 
+    return {isValid: true}
+ }
+
+ function gpsLocationAccuracyMustBeWithin(value: number, accuracyNeeded: number): IValidationResult {
+   
+    if (value > accuracyNeeded) {
+        return {
+            isValid: false,
+            message: `The location must be accurate to ${accuracyNeeded}m. Current accuracy is ${value}`
+        }
+    }
     return {isValid: true}
  }
 
@@ -83,5 +94,6 @@ export const validators: {[methodName:  string] : Function } = {
     isRequired,
     valueIsNotEqualTo,
     mustBeFutureDate,
-    mustBePastOrToday
+    mustBePastOrToday,
+    gpsLocationAccuracyMustBeWithin
 }

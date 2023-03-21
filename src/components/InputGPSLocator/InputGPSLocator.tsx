@@ -67,8 +67,41 @@ const InputGPSLocator = ({label, id, onGPSCordinatesSelected, validations}: IPro
                 })
             } else{
                 const gpsPosition: GeoPosition = await getCurrentPosition();
+    
+                //validate it now
+                if (validations){
+                  
+                  for(let validationMethodName in validations) {
+                    
+                    const valdationMethod = validators[validationMethodName]
+                   
+                
+                    if (valdationMethod) {
+                        //we got a validate method run it now    
+                     
+                        const isValid : IValidationResult = valdationMethod(gpsPosition.coords.accuracy, validations[validationMethodName])
+                       
+                        setValidationCheck({
+                            isValid: isValid.isValid,
+                            message: isValid.message
+                        })
+                       
+                        if (isValid.isValid){
+                          onGPSCordinatesSelected(id, gpsPosition)
+                          setPosition(gpsPosition)
+                        } else{
+                          setValidationCheck({
+                            isValid: isValid.isValid,
+                            message: isValid.message
+                        })
+                        }
+                    }
+                  }
+               }else {
                 onGPSCordinatesSelected(id, gpsPosition)
                 setPosition(gpsPosition)
+               }
+                
             }
         } catch (error) {
             setValidationCheck({
@@ -78,6 +111,7 @@ const InputGPSLocator = ({label, id, onGPSCordinatesSelected, validations}: IPro
         }
       };
 
+      /*
       useEffect(()=>{
         if (validations){
             for(let validationMethodName in validations) {
@@ -98,6 +132,7 @@ const InputGPSLocator = ({label, id, onGPSCordinatesSelected, validations}: IPro
             }
          }
       }, [position])
+      */
 
 
     return (<>

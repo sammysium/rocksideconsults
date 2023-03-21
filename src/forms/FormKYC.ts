@@ -45,15 +45,16 @@ export const FormKYC: IFormElements = {
     "photo": {
         "label": "Respondent Photo",
         "type": EFormElementType.image,
-        validations: {
+        "validations": {
             "isRequired": true
         }
     },
     "location": {
         "label": "Location",
         "type": EFormElementType.gps,
-        validations: {
-            "isRequired": true
+        "validations": {
+            "isRequired": true,
+            "gpsLocationAccuracyMustBeWithin": 10
         }
     }
 }
