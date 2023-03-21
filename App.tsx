@@ -8,6 +8,10 @@ import { name as appName } from './app.json';
 import ErrorBoundry from './src/components/ErrorBoundry/ErrorBoundry';
 import FormBuilder from './src/components/FormBuilder/FormBuilder';
 import { FormKYC } from './src/forms/FormKYC';
+import InputAreaMapping from './src/components/InputAreaMapping/InputAreaMapping';
+import AreaMappingGestureHandler from './src/components/InputAreaMapping/AreaMappingGestureHandler';
+import InputAreaMapper from './src/components/InputAreaMapping/InputAreaMapper';
+import { EExtraOptions, IExtraOptions } from './src/forms/IFormInfo';
 
 const styles = StyleSheet.create({
   container: {
@@ -17,6 +21,7 @@ const styles = StyleSheet.create({
 });
 
 const App = () => (
+  
   <ErrorBoundry>
     <View style={styles.container}>
           <PaperProvider>

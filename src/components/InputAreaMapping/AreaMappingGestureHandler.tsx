@@ -1,32 +1,26 @@
 import React, { FC } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import MapView from 'react-native-maps';
 
 export type TMenuCard = {
-  enabled: boolean;
-  title: string;
-  onTap: () => void;
+  enabled?: boolean;
+  title?: string;
+  onTap?: () => void;
 };
 const AreaMappingGestureHandler: FC<TMenuCard> = ({ title, onTap, enabled }) => {
+  const [points, setPoints] = React.useState([])
   return (
-    <TouchableOpacity style={styles.button} onPress={onTap}>
-      <View
-        style={{
-          backgroundColor: enabled ? 'green' : 'orange',
-          height: 40,
-          width: 40,
-          alignItems: 'center',
-          justifyContent: 'center',
-          borderRadius: 16
-        }}
-      >
-        <Image
-          source={require('../../assets/palette.png')}
-          resizeMode={'stretch'}
-          style={styles.img}
-        />
-      </View>
-      <Text style={styles.title}>{title}</Text>
-    </TouchableOpacity>
+    <MapView
+  
+    initialRegion={{
+      latitude: 37.78825,
+      longitude: -122.4324,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421,
+    }}
+    //onRegionChangeComplete runs when the user stops dragging MapView
+    onRegionChangeComplete={(region) => console.log(region)}
+  />
   );
 };
 

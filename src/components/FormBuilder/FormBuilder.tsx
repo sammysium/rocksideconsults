@@ -11,6 +11,7 @@ import InputDate, { EDateTimePickerType } from "../InputDate/InputDate";
 import InputGPSLocator from "../InputGPSLocator/InputGPSLocator";
 import InputSelect, { IInputSelectProps } from "../InputSelect/InputSelect";
 import InputText from "../InputText/InputText";
+import InputAreaMapper from "../InputAreaMapping/InputAreaMapper";
 
 interface IProps {
     formDetail: IFormElements
@@ -52,6 +53,13 @@ const FormBuilder = ({formDetail}: IProps) => {
           });
     }
 
+    const handleCalculatedArea = (fieldName: string, value: number) => {
+        setData({
+            ...data,
+            [fieldName]: value
+        })
+    }
+
     const handleDisableElementsFromEffect = (disableFields: string[]) => {
      
       setDisabledElements(disableFields)
@@ -80,7 +88,7 @@ const FormBuilder = ({formDetail}: IProps) => {
         const elements: React.ReactNode[] = []
 
         for(let fieldName in formDetail) {
-            const {label, type, effects, options, validations, skipEffect }  = formDetail[fieldName]
+            const {label, type, effects, options, validations, skipEffect, extra }  = formDetail[fieldName]
             switch (type) {
                 case EFormElementType.text:
                     elements.push(<View key={fieldName} pointerEvents={disableTouch(fieldName)} style={styles.inputView}><InputText label={label} id={fieldName} onChangeText={handleTexts} validations={validations} /></View>)
@@ -96,11 +104,14 @@ const FormBuilder = ({formDetail}: IProps) => {
                  break;
                 
                  case EFormElementType.image:
-                    elements.push(<View key={fieldName}  pointerEvents={disableTouch(fieldName)}><ImageSelector label={label} id={fieldName} onImageSelected={handleImage} /></View>)
+                    elements.push(<View key={fieldName} style={styles.inputView}  pointerEvents={disableTouch(fieldName)}><ImageSelector label={label} id={fieldName} onImageSelected={handleImage} /></View>)
                 break;
 
                 case EFormElementType.gps:
-                    elements.push(<View key={fieldName} pointerEvents={disableTouch(fieldName)}><InputGPSLocator label={label} id={fieldName} onGPSCordinatesSelected={handleGPS} validations={validations} /></View>)
+                    elements.push(<View key={fieldName} style={styles.inputView} pointerEvents={disableTouch(fieldName)}><InputGPSLocator label={label} id={fieldName} onGPSCordinatesSelected={handleGPS} validations={validations} /></View>)
+                    break;
+                case EFormElementType.land:
+                    elements.push(<View key={fieldName} style={styles.inputViewMap} pointerEvents={disableTouch(fieldName)}><InputAreaMapper label={label} id={fieldName} onAreaCalculated={handleCalculatedArea} validations={validations} extraOptions={extra} /></View>)
                     break;
             }
         }
@@ -134,6 +145,17 @@ const styles = StyleSheet.create({
     
        
         height: 50,
+
+        marginVertical: 5,
+        textAlign: 'left'
+    
+      },
+      inputViewMap: {
+    
+        marginBottom: 5,
+    
+       
+        height: 350,
 
         marginVertical: 5,
         textAlign: 'left'

@@ -1,4 +1,4 @@
-import { EFormElementType, IFormElements } from "./IFormInfo";
+import { EExtraOptions, EFormElementType, IFormElements } from "./IFormInfo";
 
 export const FormKYC: IFormElements = {
     "consent": {
@@ -55,6 +55,13 @@ export const FormKYC: IFormElements = {
         "validations": {
             "isRequired": true,
             "gpsLocationAccuracyMustBeWithin": 10
+        }
+    },
+    "land": {
+        "label": "Land",
+        "type": EFormElementType.land,
+        "extra": {
+            "measureIn": EExtraOptions.acre
         }
     }
 }

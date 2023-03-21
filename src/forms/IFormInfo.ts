@@ -10,7 +10,14 @@ export enum EFormElementType {
     date="date",
     selectOne="selectOne",
     image="image",
-    gps="gps"
+    gps="gps",
+    land="land"
+}
+export enum EExtraOptions {
+    "acre"="acre"
+}
+export interface IExtraOptions {
+    measureIn?: EExtraOptions
 }
 export interface IFormElements {
     [fieldName: string]: {
@@ -19,6 +26,7 @@ export interface IFormElements {
         effects?: string,
         type: EFormElementType,
         options?: IInputSelectProps[],
-        skipEffect?: ISkipFormDataRule
+        skipEffect?: ISkipFormDataRule,
+        extra?: IExtraOptions
     }
 }
