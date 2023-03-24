@@ -13,7 +13,7 @@ interface IProps {
     label: string,
     id: string,
     options: IInputSelectProps[],
-    onSelectionChanged: (element: string, value: string) => void,
+    onSelectionChanged: (element: string, value: string, isError: boolean) => void,
     validations?: IValidationRule,
     skipEffect?: ISkipFormDataRule,
     skipEffectHandler: (disableFields: string[]) => void
@@ -49,9 +49,10 @@ const InputSelect = ({label, id, onSelectionChanged, validations, options, skipE
                 })
                 if (isValid.isValid){
                     emitEffects(value)
-                    onSelectionChanged(id, value)
+                    onSelectionChanged(id, value, false)
                     
                 } else{
+                    onSelectionChanged(id, value, true)
                     break;
                 }
             }

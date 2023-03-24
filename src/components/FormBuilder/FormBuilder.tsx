@@ -21,36 +21,64 @@ interface IProps {
 
 const FormBuilder = ({formDetail}: IProps) => {   
     const [data, setData] = React.useState({})
+    const [errorFields, setErrorFields]= React.useState<string[]>([])
     const [disabledElements, setDisabledElements] = React.useState<string[]>([])
 
+    const _manageErrors = (fieldName: string, isErrorfulField: boolean) => {
+       if (isErrorfulField){
+        setErrorFields(oldArray => [...oldArray, fieldName]);
+       } else {
+        setErrorFields(errorFields.filter((fn)=>fn !== fieldName))
+       }
+    }
 
-    const handleGPS = (fieldName: string, value: GeoPosition) => {
+
+    const handleGPS = (fieldName: string, isError: boolean, value?: GeoPosition) => {
+        if(isError){
+            _manageErrors(fieldName, isError)
+        } else {
         setData({
             ...data,
             [fieldName]: value
           });
+        }
     }
 
-    const handleTexts = (fieldName: string, value: string)=>{
+    const handleTexts = (fieldName: string, value: string, isError: boolean)=>{
+        if(isError){
+            _manageErrors(fieldName, isError)
+        } else {
+            _manageErrors(fieldName, isError)
         setData({
             ...data,
             [fieldName]: value
           });
+        }
     }
 
-    const handleDate = (fieldName: string, value: Date)=>{
+    const handleDate = (fieldName: string, value: Date, isError : boolean = false)=>{
+        if(isError){
+            _manageErrors(fieldName, isError)
+        } else {
+            _manageErrors(fieldName, isError)
+            setData({
+                ...data,
+                [fieldName]: value
+              });
+        }
        
-        setData({
-            ...data,
-            [fieldName]: value
-          });
     }
 
-    const handleImage = (fieldName: string, value: string) => {
+    const handleImage = (fieldName: string, value: string, isError: boolean) => {
+        if(isError){
+            _manageErrors(fieldName, isError)
+        } else {
+            _manageErrors(fieldName, isError)
         setData({
             ...data,
             [fieldName]: value
           });
+        }
     }
 
     const handleCalculatedArea = (fieldName: string, value: number) => {
@@ -104,7 +132,7 @@ const FormBuilder = ({formDetail}: IProps) => {
                  break;
                 
                  case EFormElementType.image:
-                    elements.push(<View key={fieldName} style={styles.inputView}  pointerEvents={disableTouch(fieldName)}><ImageSelector label={label} id={fieldName} onImageSelected={handleImage} /></View>)
+                    elements.push(<View key={fieldName} style={styles.inputViewPhoto}  pointerEvents={disableTouch(fieldName)}><ImageSelector label={label} id={fieldName} onImageSelected={handleImage} /></View>)
                 break;
 
                 case EFormElementType.gps:
@@ -123,7 +151,7 @@ const FormBuilder = ({formDetail}: IProps) => {
     return (
     <View style={styles.container}>
     {renderForm()}
-    <Button onPress={saveDataToJson} mode="contained">Save</Button>
+    <Button onPress={saveDataToJson} mode="contained" disabled={errorFields.length>0}>Save</Button>
     
     </View>)
 };
@@ -144,7 +172,7 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     
        
-        height: 50,
+      
 
         marginVertical: 5,
         textAlign: 'left'
@@ -161,6 +189,17 @@ const styles = StyleSheet.create({
         textAlign: 'left'
     
       },
+      inputViewPhoto: {
+        
+    
+       
+        flex: 1,
+        flexDirection: 'column',
+
+        marginVertical: 5,
+        textAlign: 'center'
+        
+      }
       
     
   

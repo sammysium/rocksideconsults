@@ -2,7 +2,8 @@ import React from 'react';
 import { HelperText, Button, Text } from 'react-native-paper';
 import { IValidationResult, IValidationRule } from '../../utils/validators';
 import {launchImageLibrary, ImageLibraryOptions, launchCamera, ImagePickerResponse } from 'react-native-image-picker';
-import { Image, PermissionsAndroid, StyleSheet } from 'react-native';
+import { Image, PermissionsAndroid, StyleSheet, View } from 'react-native';
+import { blue100 } from 'react-native-paper/lib/typescript/src/styles/themes/v2/colors';
 
 export interface IInputSelectProps {
     value: number | string,
@@ -12,7 +13,7 @@ export interface IInputSelectProps {
 interface IProps {
     label: string,
     id: string,
-    onImageSelected: (fieldName: string, value: string) => void,
+    onImageSelected: (fieldName: string, value: string, isError: boolean) => void,
     validations?: IValidationRule
 }
 const ImageSelector = ({label, id, onImageSelected, validations}: IProps) => {
@@ -24,6 +25,7 @@ const ImageSelector = ({label, id, onImageSelected, validations}: IProps) => {
 
     const invalidPhotoSelection = () => {
         if (validations) {
+          onImageSelected(id, "", true)
           setValidationCheck({
             isValid: false,
             message: 'select photo'
@@ -79,7 +81,7 @@ const ImageSelector = ({label, id, onImageSelected, validations}: IProps) => {
           invalidPhotoSelection();
       } else {
         if (response.assets && response.assets.length > 0){
-          onImageSelected(id, response.assets[0].uri!!)
+          onImageSelected(id, response.assets[0].uri!!, false)
           setSelectedPhoto(response.assets[0].uri!!)
           setValidationCheck({
               isValid: true
@@ -91,7 +93,7 @@ const ImageSelector = ({label, id, onImageSelected, validations}: IProps) => {
       });
     }
   } catch (error) {
-    
+    invalidPhotoSelection()
   }
       
   
@@ -117,7 +119,7 @@ const ImageSelector = ({label, id, onImageSelected, validations}: IProps) => {
 
            
              if (response.assets && response.assets.length > 0){
-                onImageSelected(id, response.assets[0].uri!!)
+                onImageSelected(id, response.assets[0].uri!!, false)
                 setSelectedPhoto(response.assets[0].uri!!)
                 setValidationCheck({
                     isValid: true
@@ -137,15 +139,20 @@ const ImageSelector = ({label, id, onImageSelected, validations}: IProps) => {
     <Text>{label}</Text>
     <Button onPress={selectPhoto}>Chose Photo</Button>
     <Button onPress={openCamera}>Take Photo</Button>
-    {selectedPhoto !== "" && (
-       <Image
+
+{selectedPhoto !== "" && (
+
+<Image
        style={styles.profilepicture}
        source={{
         uri:  selectedPhoto
       }}
        />
+
+)}
+       
         
-    )}
+
     <HelperText type="error" visible={!validationCheck.isValid}>
      {validationCheck.message}
   </HelperText>
@@ -156,7 +163,7 @@ const ImageSelector = ({label, id, onImageSelected, validations}: IProps) => {
 const styles = StyleSheet.create({
     profilepicture: {
       width: 200,
-      height: 250,
+      height: 250
     }
   });
   

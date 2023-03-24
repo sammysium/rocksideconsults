@@ -5,6 +5,7 @@ import MapView, {  MapPressEvent, Polygon } from 'react-native-maps';
 import { calculateMarkedArea } from '../../utils/calculator';
 import { IExtraOptions } from '../../forms/IFormInfo';
 import { IValidationRule } from '../../utils/validators';
+import { blue100 } from 'react-native-paper/lib/typescript/src/styles/themes/v2/colors';
 
 //this should be in a central location
 export interface Coordinate {
@@ -15,7 +16,7 @@ export interface Coordinate {
 interface IProps {
     label: string,
     id: string,
-    onAreaCalculated: (fieldName: string, value: number) => void,
+    onAreaCalculated: (fieldName: string, value: number, isError: boolean) => void,
     validations?: IValidationRule,
     extraOptions?: IExtraOptions
 }
@@ -26,7 +27,7 @@ const InputAreaMapper = ({extraOptions, label, id, onAreaCalculated}: IProps) =>
   const handlePress = (event: MapPressEvent) => {
     const { coordinate } = event.nativeEvent;
     setCoordinates([...coordinates, coordinate]);
-    onAreaCalculated(id, calculateMarkedArea(coordinates, extraOptions))
+    onAreaCalculated(id, calculateMarkedArea(coordinates, extraOptions), false)
   };
 
   return (
@@ -44,12 +45,15 @@ const InputAreaMapper = ({extraOptions, label, id, onAreaCalculated}: IProps) =>
 }
       </MapView>
       <View style={styles.areaContainer}>
-      <Text style={styles.areaValue}>
+        <View style={styles.areaValue}>
+        <Text style={styles.areaText}>
         Area: {calculateMarkedArea(coordinates, extraOptions).toFixed(2)} {extraOptions && extraOptions.measureIn !== undefined ? extraOptions.measureIn : "Sq Mr"}
       </Text>
       <Button onPress={()=>setCoordinates([])} mode="elevated">
         Clear Area
       </Button>
+        </View>
+      
       </View>
 
     </View>
@@ -65,17 +69,24 @@ const styles = {
   },
   areaContainer: {
     flexDirection: 'column',
+  
+  },
+  areaValue: {
+    flex: 1,
+    flexDirection: 'column',
+    borderWidth: 3,
+    borderColor: 'blue',
+    padding: 10,
+    borderRadius: 5,
     position: 'absolute',
     bottom: 20,
     left: 20
   },
-  areaValue: {
-   
+  areaText: {
     backgroundColor: 'green',
     color: 'white',
-    padding: 10,
-    borderRadius: 5,
-  },
+    fontSize: 15
+  }
   
 };
 

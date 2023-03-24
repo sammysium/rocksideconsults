@@ -7,7 +7,7 @@ import { validators,  IValidationResult, IValidationRule } from '../../utils/val
 interface IProps {
     label: string,
     id: string,
-    onChangeText: (elementName: string, value: string) => void,
+    onChangeText: (elementName: string, value: string, errorFound: boolean) => void,
     validations?: IValidationRule
 }
 const InputText = ({label, id, onChangeText, validations}: IProps) => {
@@ -34,14 +34,15 @@ const InputText = ({label, id, onChangeText, validations}: IProps) => {
                     message: isValid.message
                 })
                 if (isValid.isValid){
-                    onChangeText(id, text)
+                    onChangeText(id, text, false)
                 } else{
+                    onChangeText(id, text, true)
                     break;
                 }
             }
           }
        }else{
-        onChangeText(id,text)
+        onChangeText(id,text, false)
        }
     }
 

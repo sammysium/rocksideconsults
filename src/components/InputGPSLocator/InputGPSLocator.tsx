@@ -8,7 +8,7 @@ import { PermissionsAndroid } from 'react-native';
 interface IProps {
     label: string,
     id: string,
-    onGPSCordinatesSelected: (fieldName: string, value: GeoPosition) => void,
+    onGPSCordinatesSelected: (fieldName: string, isError : boolean, value?: GeoPosition) => void,
     validations?: IValidationRule
 }
 
@@ -87,9 +87,10 @@ const InputGPSLocator = ({label, id, onGPSCordinatesSelected, validations}: IPro
                         })
                        
                         if (isValid.isValid){
-                          onGPSCordinatesSelected(id, gpsPosition)
+                          onGPSCordinatesSelected(id, false, gpsPosition)
                           setPosition(gpsPosition)
                         } else{
+                          onGPSCordinatesSelected(id, true, gpsPosition)
                           setValidationCheck({
                             isValid: isValid.isValid,
                             message: isValid.message
@@ -98,12 +99,13 @@ const InputGPSLocator = ({label, id, onGPSCordinatesSelected, validations}: IPro
                     }
                   }
                }else {
-                onGPSCordinatesSelected(id, gpsPosition)
+                onGPSCordinatesSelected(id,false, gpsPosition)
                 setPosition(gpsPosition)
                }
                 
             }
         } catch (error) {
+          onGPSCordinatesSelected(id, false, false)
             setValidationCheck({
                 isValid: false,
                 message: 'Error getting coordinates'
@@ -111,28 +113,7 @@ const InputGPSLocator = ({label, id, onGPSCordinatesSelected, validations}: IPro
         }
       };
 
-      /*
-      useEffect(()=>{
-        if (validations){
-            for(let validationMethodName in validations) {
   
-              const valdationMethod = validators[validationMethodName]
-          
-              if (valdationMethod) {
-
-                  const isValid : IValidationResult = valdationMethod(position, validations[validationMethodName])
-                  setValidationCheck({
-                      isValid: isValid.isValid,
-                      message: isValid.message
-                  })
-                  if (!isValid.isValid){
-                      break;
-                  }
-              }
-            }
-         }
-      }, [position])
-      */
 
 
     return (<>

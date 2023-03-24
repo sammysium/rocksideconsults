@@ -11,7 +11,7 @@ export enum EDateTimePickerType {
 interface IProps {
     label: string,
     id: string,
-    onDateSelected: (fieldName: string, value: Date) => void,
+    onDateSelected: (fieldName: string, value: Date, errorFound: boolean) => void,
     validations?: IValidationRule,
     mode: EDateTimePickerType
 }
@@ -41,14 +41,15 @@ const InputDate = ({label, id, onDateSelected, validations, mode}: IProps) => {
                 })
                 
                 if (isValid.isValid){
-                    onDateSelected(id, value)
+                    onDateSelected(id, value, false)
                 } else{
+                  onDateSelected(id, value, true)
                     break;
                 }
             }
           }
        }else{
-        onDateSelected(id, value)
+        onDateSelected(id, value, false)
        }
     }
 
